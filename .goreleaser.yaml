@@ -25,7 +25,7 @@ brews:
       owner: mgorunuch
       name: memgraph-mcp-server
       branch: main
-    folder: Formula
+    directory: Formula
     homepage: https://github.com/mgorunuch/memgraph-mcp-server
     description: Memgraph MCP Server for Claude Code
     license: MIT
