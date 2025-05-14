@@ -1,0 +1,36 @@
+class MemgraphMcpServer < Formula
+  desc "Memgraph MCP Server for Claude Code"
+  homepage "https://github.com/mgorunuch/memgraph-mcp-server"
+  version "{{ .Version }}"
+  license "MIT"
+
+  on_macos do
+    if Hardware::CPU.arm?
+      url "{{ .Artifact.MacOSARM64 }}"
+      sha256 "{{ .Checksums.MacOSARM64 }}"
+    elsif Hardware::CPU.intel?
+      url "{{ .Artifact.MacOSAMD64 }}"
+      sha256 "{{ .Checksums.MacOSAMD64 }}"
+    end
+  end
+
+  on_linux do
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "{{ .Artifact.LinuxARM64 }}"
+      sha256 "{{ .Checksums.LinuxARM64 }}"
+    elsif Hardware::CPU.intel?
+      url "{{ .Artifact.LinuxAMD64 }}"
+      sha256 "{{ .Checksums.LinuxAMD64 }}"
+    end
+  end
+
+  depends_on "go" => :build
+
+  def install
+    bin.install "memgraph-mcp-server"
+  end
+
+  test do
+    system "#{bin}/memgraph-mcp-server", "--version"
+  end
+end

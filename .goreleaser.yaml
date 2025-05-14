@@ -1,0 +1,68 @@
+project_name: memgraph-mcp-server
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: memgraph-mcp-server
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+    main: ./main.go
+
+brews:
+  - repository:
+      owner: mgorunuch
+      name: memgraph-mcp-server
+      branch: main
+    folder: Formula
+    homepage: https://github.com/mgorunuch/memgraph-mcp-server
+    description: Memgraph MCP Server for Claude Code
+    license: MIT
+    test: |
+      system "#{bin}/memgraph-mcp-server --version"
+    dependencies:
+      - name: go
+        type: build
+    install: |
+      bin.install "memgraph-mcp-server"
+    commit_author:
+      name: goreleaserbot
+      email: noreply@goreleaser.com
+
+archives:
+  - format: tar.gz
+    # this name template makes the OS and Arch compatible with the results of `uname -s` and `uname -m`
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE*
+
+checksum:
+  name_template: 'checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'

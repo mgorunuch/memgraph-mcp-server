@@ -202,11 +202,8 @@ func handleQuery(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToo
 	var keys []string
 
 	// Collect all records
-	for {
-		record, err := result.Next(ctx)
-		if err != nil {
-			break // End of records or error
-		}
+	for result.Next(ctx) {
+		record := result.Record()
 
 		// Get keys if this is the first record
 		if len(keys) == 0 {
@@ -215,8 +212,8 @@ func handleQuery(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToo
 
 		// Convert record to map
 		row := make(map[string]interface{})
-		for _, key := range keys {
-			value := record.Values[key]
+		for i, key := range keys {
+			value := record.Values[i]
 			
 			// Handle various Neo4j types
 			switch v := value.(type) {
@@ -287,15 +284,12 @@ func handleSchemaInfo(ctx context.Context, request mcp.CallToolRequest) (*mcp.Ca
 	// Process the results
 	var schema []map[string]interface{}
 	
-	for {
-		record, err := result.Next(ctx)
-		if err != nil {
-			break // End of records or error
-		}
+	for result.Next(ctx) {
+		record := result.Record()
 
 		schemaItem := make(map[string]interface{})
-		for key, value := range record.Values {
-			schemaItem[key] = value
+		for i, key := range record.Keys {
+			schemaItem[key] = record.Values[i]
 		}
 		schema = append(schema, schemaItem)
 	}

@@ -1,5 +1,7 @@
 # Memgraph MCP Server
 
+![Memgraph MCP Server](banner.png)
+
 A Model Control Protocol (MCP) server for Memgraph databases that allows Claude to interact with your Memgraph graph databases.
 
 ## Using with Claude Code
@@ -14,11 +16,21 @@ JSON=$(memgraph-mcp-server --json --connection-uri 'bolt://localhost:7687') \
 
 ## Installation
 
+### Using Homebrew
+
+```bash
+# Add the tap
+brew tap mgorunuch/memgraph-mcp-server https://github.com/mgorunuch/memgraph-mcp-server
+
+# Install the server
+brew install mgorunuch/memgraph-mcp-server/memgraph-mcp-server
+```
+
 ### Using Go
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/memgraph-mcp-server.git
+git clone https://github.com/mgorunuch/memgraph-mcp-server.git
 
 # Build the server
 cd memgraph-mcp-server

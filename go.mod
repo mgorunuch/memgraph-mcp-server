@@ -1,6 +1,8 @@
 module github.com/mgorunuch/memgraph-mcp-server
 
-go 1.21
+go 1.23
+
+toolchain go1.23.2
 
 require (
 	github.com/mark3labs/mcp-go v0.27.0
